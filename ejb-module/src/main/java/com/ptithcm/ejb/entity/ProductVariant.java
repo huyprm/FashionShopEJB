@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import lombok.*;
 
+import java.io.Serializable;
+
 @Entity
 @Table(name = "product_variants")
 @Setter
@@ -11,7 +13,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ProductVariant {
+public class ProductVariant implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY )
     private int id;

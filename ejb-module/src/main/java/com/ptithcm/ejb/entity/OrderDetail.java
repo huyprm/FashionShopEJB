@@ -3,13 +3,15 @@ package com.ptithcm.ejb.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.io.Serializable;
+
 @Entity(name = "orderDetails")
 @Setter
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class OrderDetail {
+public class OrderDetail implements Serializable {
     @Id
     @GeneratedValue (strategy = GenerationType.IDENTITY)
     private long id;

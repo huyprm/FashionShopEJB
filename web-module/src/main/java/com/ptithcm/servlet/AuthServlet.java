@@ -50,13 +50,13 @@ public class AuthServlet extends HttpServlet {
             if ("/login".equals(path)) {
                 handleLogin(request, response);
             } else if ("/register".equals(path)) {
-                handleRegister(request, response);
-            } else {
-                response.sendError(HttpServletResponse.SC_NOT_FOUND);
-            }
+                handleRegister(request, response);}
+//            } else {
+//                response.sendError(HttpServletResponse.SC_NOT_FOUND);
+//            }
         } catch (Exception e) {
             request.setAttribute("error", e.getMessage());
-            request.getRequestDispatcher("/home.jsp").forward(request, response);
+            request.getRequestDispatcher("/WEB-INF/home.jsp").forward(request, response);
         }
     }
 

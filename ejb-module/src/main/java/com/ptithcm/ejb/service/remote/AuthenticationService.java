@@ -37,6 +37,7 @@ public class AuthenticationService implements AuthenticationServiceRemote {
                 query = entityManager.createQuery("SELECT u FROM users u WHERE u.phone = :username", User.class);
             }
 
+            query.setParameter("username", username);
             user = query.getSingleResult();
         } catch (NoResultException e) {
             throw new Exception(" username không tồn tại");

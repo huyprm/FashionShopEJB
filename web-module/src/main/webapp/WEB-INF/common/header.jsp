@@ -30,17 +30,18 @@
                 <c:if test="${not empty sessionScope.user}">
                     <div class="profile-icon">
                         <img src="https://cdn-icons-png.flaticon.com/512/6858/6858504.png" alt="Profile" class="avatar-img">
-                        <span class="ms-2">${sessionScope.user}</span>
+                        <span class="ms-2">${sessionScope.user.email}</span>
                         <a href="${pageContext.request.contextPath}/logout" class="btn btn-danger ms-2">Đăng Xuất</a>
+                    </div>
+                    <!-- Biểu tượng giỏ hàng -->
+                    <div class="cart-icon">
+                        <img src="https://cdn-icons-png.flaticon.com/512/263/263142.png" alt="Cart" class="cart-img">
+                        <span class="cart-count" id="cartCount">0</span>
                     </div>
                 </c:if>
 
-                <!-- Biểu tượng giỏ hàng -->
-                <div class="cart-icon">
-                    <img src="https://cdn-icons-png.flaticon.com/512/263/263142.png" alt="Cart" class="cart-img">
-                    <span class="cart-count" id="cartCount">0</span>
-                </div>
         </div>
+    </div>
     </div>
 </nav>
 
@@ -59,11 +60,11 @@
                           method="post">
                         <div class="mb-3">
                             <label for="loginEmail" class="form-label">Địa chỉ Email</label>
-                            <input type="email" class="form-control" id="loginEmail" required>
+                            <input type="email" class="form-control" id="loginEmail" name="username" required>
                         </div>
                         <div class="mb-3">
                             <label for="loginPassword" class="form-label">Mật khẩu</label>
-                            <input type="password" class="form-control" id="loginPassword" required>
+                            <input type="password" class="form-control" id="loginPassword" name="password" required>
                         </div>
                         <button type="submit" class="btn btn-primary w-100">Đăng Nhập</button>
                     </form>

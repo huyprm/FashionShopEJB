@@ -12,6 +12,7 @@ import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.PersistenceException;
 import org.mindrot.jbcrypt.BCrypt;
 
 import java.util.ArrayList;
@@ -31,14 +32,23 @@ public class UserService implements UserServiceRemote {
 
 
     @Override
-    public User createUser(String email, String password, String fullName) {
+    public User createUser(String email, String password, String fullName) throws Exception {
+        if (findByEmail(email) != null) {
+            throw new Exception("Email đã tồn tại, vui lòng chọn email khác.");
+        }
+
         User user = new User();
 
         user.setEmail(email);
         user.setPassword(hashPassword(password));
         user.setFullName(fullName);
 
-        entityManager.persist(user);
+        try {
+            entityManager.persist(user);
+        } catch (PersistenceException e) {
+            throw new Exception("Email đã tồn tại");
+        }
+
         return user;
     }
 
@@ -83,6 +93,18 @@ public class UserService implements UserServiceRemote {
 
         return entityManager.createQuery("SELECT u FROM users u", User.class).getResultList();
     }
+
+    @Override
+    public User findByEmail(String email) {
+        try {
+            return entityManager.createQuery("SELECT u FROM users u WHERE u.email = :email", User.class)
+                    .setParameter("email", email)
+                    .getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
+
 }
 
 

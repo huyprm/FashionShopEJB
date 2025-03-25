@@ -6,6 +6,7 @@ import jakarta.validation.constraints.Min;
 import lombok.*;
 
 
+import java.io.Serializable;
 import java.util.List;
 
 @Entity(name = "products")
@@ -14,7 +15,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Product {
+public class Product implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;

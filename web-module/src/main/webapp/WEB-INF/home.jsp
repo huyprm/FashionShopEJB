@@ -7,7 +7,7 @@
     <title>Fashion Style - Trang Chủ</title>
 
     <!-- CSS -->
-    <link rel="stylesheet" href="/src/main/webapp/assets/css/home.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/home.css">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
@@ -60,7 +60,6 @@
 
 <!-- JavaScript -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<script src="/src/main/webapp/assets/js/home.js"></script>
 
 </body>
 </html>

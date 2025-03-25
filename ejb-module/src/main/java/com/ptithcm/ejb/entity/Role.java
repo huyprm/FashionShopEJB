@@ -3,6 +3,7 @@ package com.ptithcm.ejb.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.io.Serializable;
 import java.util.List;
 
 @Entity(name ="roles")
@@ -11,7 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Role {
+public class Role implements Serializable {
     @Id
     private String role;
     @Column(nullable = false)

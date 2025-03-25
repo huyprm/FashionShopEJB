@@ -3,6 +3,7 @@ package com.ptithcm.ejb.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.io.Serializable;
 import java.util.List;
 
 @Entity(name = "carts")
@@ -11,7 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Cart {
+public class Cart implements Serializable {
     @Id
     @GeneratedValue (strategy = GenerationType.IDENTITY)
     private int id;
