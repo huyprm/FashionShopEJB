@@ -42,6 +42,8 @@ public class ProductService implements ProductServiceRemote {
         product.setCategory(request.getCategory());
         product.setDescription(request.getDescription());
         product.setStock_quantity(request.getStock_quantity());
+        product.setImages(request.getImages());
+        product.setThumbnail(request.getThumbnail());
 
         List<ProductVariant> list = request.getProductVariantList().stream().map(productVariantRequest ->{
             ProductVariant product_variant = ProductVariant.builder()

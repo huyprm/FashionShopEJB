@@ -47,6 +47,39 @@
         <div class="category-list" id="category-list"></div>
     </section>
 
+    <div class="container py-5">
+        <c:forEach var="product" items="${products}" varStatus="status">
+            <!-- Mở hàng mới khi bắt đầu hoặc sau mỗi 4 sản phẩm -->
+            <c:if test="${status.index % 4 == 0}">
+                <div class="row g-4" style="padding-top: 20px;">
+            </c:if>
+
+            <div class="col-10 col-md-4 col-lg-3">
+                <div class="card product-card" onclick="window.location.href='${pageContext.request.contextPath}/product-detail?id=${product.id}'" >
+                    <div class="sale-badge">SALE</div>
+                    <img src="${pageContext.request.contextPath}/${product.thumbnail}" class="card-img-top p-3" alt="${product.name}">
+                    <div class="card-body">
+                        <h5 class="card-title">${product.name}</h5>
+                        <div class="rating mb-2">
+                            <span class="stars">★★★★★</span>
+                            <span class="rating-count">(${product.reviews})</span>
+                        </div>
+                        <div class="price-block mb-2">
+                            <span class="original-price">$${product.price}</span>
+                            <span class="current-price text-danger">VNĐ</span>
+                        </div>
+                        <p class="card-text">${product.description}</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Đóng hàng khi đã đủ 4 sản phẩm -->
+            <c:if test="${status.index % 4 == 3 or status.last}">
+                </div>
+            </c:if>
+        </c:forEach>
+
+    </div>
     <!-- Sản Phẩm Nổi Bật -->
     <section class="featured-products mt-5">
         <h2 class="section-title">Sản Phẩm Nổi Bật</h2>
