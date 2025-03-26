@@ -10,4 +10,5 @@ import java.util.Map;
 public interface ProductVariantServiceRemote {
     List<ProductVariant> updateProductVariant(Map<Integer, ProductVariant> productVariantRequests);
     String deleteProductVariant(List<Integer> ids);
+    List<ProductVariant> getListProductVariantById(int id);
 }

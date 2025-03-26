@@ -8,7 +8,6 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Stateless
 public class ProductService implements ProductServiceRemote {

@@ -1,10 +1,11 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
 <html>
 <head>
   <title>Fashion Style - Chi Tiết Sản Phẩm</title>
-  <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/product-detail.css"/>
+  <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/product-detail.css">
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet"/>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
 </head>
@@ -14,150 +15,139 @@
 <main class="container product-detail-container">
   <div class="row">
     <div class="col-md-6 product-image">
-      <img src="${product.thumbnail}" alt="Product Image"/>
+      <img src="${product.thumbnail}" alt="Product Image" id="productImage"/>
     </div>
     <div class="col-md-6 product-info">
-      <h1 class="product-title">${product.name}</h1>
-      <p class="product-price">${product.price} VNĐ</p>
-      <p class="product-stock">Còn lại: ${product.stock_quantity} sản phẩm</p>
-      <p class="product-rating">Đánh giá: ${product.rating}/5</p>
-      <p class="product-description">${product.description}</p>
+      <h1 class="product-title" id="productName">${product.name}</h1>
+      <p class="product-price" id="productPrice">${product.price} VNĐ</p>
+      <p class="product-stock" id="productStock">Còn lại: ${product.stock_quantity} sản phẩm</p>
+      <p class="product-rating" id="productRating">Đánh giá: ${product.rating}/5</p>
+      <p class="product-description" id="productDescription">${product.description}</p>
 
       <!-- Color Options -->
-      <div class="option-group">
-        <label>Màu sắc:</label>
-        <div class="color-options">
-          <c:forEach items="${colors}" var="color">
-            <button class="color-btn ${selectedColor eq color ? 'active' : ''}"
-                    onclick="setSelectedColor('${color}')">
-                ${color}
-            </button>
-          </c:forEach>
+      <c:if test="${not empty colors}">
+        <div class="option-group">
+          <label>Màu sắc:</label>
+          <div class="color-options" id="colorOptions">
+            <c:forEach items="${colors}" var="color" varStatus="loop">
+              <button class="color-btn ${loop.first ? 'active' : ''}"
+                      onclick="toggleOption(this, document.getElementById('colorOptions')); setSelectedColor('${color}')">
+                  ${color}
+              </button>
+            </c:forEach>
+          </div>
         </div>
-      </div>
+      </c:if>
 
       <!-- Size Options -->
-      <div class="option-group">
-        <label>Kích thước:</label>
-        <div class="size-options">
-          <c:forEach items="${sizes}" var="size">
-            <button class="size-btn ${selectedSize eq size ? 'active' : ''}"
-                    onclick="setSelectedSize('${size}')">
-                ${size}
-            </button>
-          </c:forEach>
+      <c:if test="${not empty sizes}">
+        <div class="option-group">
+          <label>Kích thước:</label>
+          <div class="size-options" id="sizeOptions">
+            <c:forEach items="${sizes}" var="size" varStatus="loop">
+              <button class="size-btn ${loop.first ? 'active' : ''}"
+                      onclick="toggleOption(this, document.getElementById('sizeOptions')); setSelectedSize('${size}')">
+                  ${size}
+              </button>
+            </c:forEach>
+          </div>
         </div>
-      </div>
+      </c:if>
 
       <!-- Quantity -->
       <div class="quantity-group">
         <label>Số lượng:</label>
-        <form action="${pageContext.request.contextPath}/product/detail" method="post">
-          <input type="hidden" name="action" value="decrease"/>
-          <input type="hidden" name="id" value="${product.id}"/>
-          <button type="submit" class="quantity-btn">-</button>
-        </form>
-
-        <input type="text" class="quantity-input" value="${quantity}" name="quantity"/>
-
-        <form action="${pageContext.request.contextPath}/product/detail" method="post">
-          <input type="hidden" name="action" value="increase"/>
-          <input type="hidden" name="id" value="${product.id}"/>
-          <button type="submit" class="quantity-btn">+</button>
-        </form>
+        <button id="decreaseQty" class="quantity-btn">-</button>
+        <input type="text" class="quantity-input" value="1" id="quantity" name="quantity" readonly/>
+        <button id="increaseQty" class="quantity-btn">+</button>
       </div>
 
       <!-- Action Buttons -->
       <div class="action-buttons">
-        <form action="${pageContext.request.contextPath}/cart" method="post">
-          <input type="hidden" name="action" value="add"/>
-          <input type="hidden" name="productId" value="${product.id}"/>
-          <input type="hidden" name="color" value="${selectedColor}"/>
-          <input type="hidden" name="size" value="${selectedSize}"/>
-          <input type="hidden" name="quantity" value="${quantity}"/>
-          <button type="submit" class="btn btn-add-to-cart">Thêm vào giỏ hàng</button>
-        </form>
-
-        <form action="${pageContext.request.contextPath}/checkout" method="post">
-          <input type="hidden" name="productId" value="${product.id}"/>
-          <input type="hidden" name="color" value="${selectedColor}"/>
-          <input type="hidden" name="size" value="${selectedSize}"/>
-          <input type="hidden" name="quantity" value="${quantity}"/>
-          <button type="submit" class="btn btn-buy-now">Mua ngay</button>
-        </form>
+        <button id="addToCartBtn" class="btn-add-to-cart">Thêm vào giỏ hàng</button>
+        <button id="buyNowBtn" class="btn-buy-now">Mua ngay</button>
       </div>
     </div>
   </div>
 </main>
 
-<!-- Bundle Deal Section -->
-<c:if test="${not empty bundleDeal}">
-  <section class="deal-section">
-    <h3 class="title_deal">Mua thêm deal sốc</h3>
-    <div class="bundle">
-      <div class="deal-item main-item">
-        <img src="${product.thumbnail}" alt="Product Image"/>
-        <div class="deal-info">
-          <p class="deal-name">
-              ${product.name}
-            <button class="open-popup">🎨</button>
-          </p>
-          <p class="deal-label">Deal Sốc <span>-0%</span></p>
-          <p class="original-price">${product.price} VNĐ</p>
-          <p class="deal-price">
-            <strong>${product.price} VNĐ</strong>
-          </p>
-        </div>
-      </div>
-      <span class="plus-sign">+</span>
-      <div class="bundle-items">
-        <c:forEach items="${bundleProducts}" var="bundleProduct">
-          <div class="deal-item">
-            <input type="checkbox" class="deal-checkbox"
-                   name="selectedBundleProducts" value="${bundleProduct.id}"
-              ${selectedBundleProducts[bundleProduct.id] ? 'checked' : ''}/>
-            <img src="${bundleProduct.thumbnail}" alt="Bundle Product"/>
-            <div class="deal-info">
-              <p class="deal-name">
-                  ${bundleProduct.name}
-                <button class="open-popup">🎨</button>
-              </p>
-              <p class="deal-label">Deal Sốc <span>-50%</span></p>
-              <p class="original-price">200.000 VNĐ</p>
-              <p class="deal-price"><strong>100.000 VNĐ</strong></p>
-            </div>
-          </div>
-        </c:forEach>
-      </div>
-      <div class="bundle-summary">
-        <p>
-          <strong>Tổng cộng: <span>${bundleTotal} VNĐ</span></strong>
-        </p>
-        <p>Tiết kiệm: <span>${bundleDiscount} VNĐ</span></p>
-        <form action="${pageContext.request.contextPath}/bundle" method="post">
-          <input type="hidden" name="productId" value="${product.id}"/>
-          <button type="submit" class="btn btn-buy-now">Bấm để mua deal sốc</button>
-        </form>
-      </div>
-    </div>
-  </section>
-</c:if>
-
 <jsp:include page="/WEB-INF/common/footer.jsp"/>
 
-<script src="${pageContext.request.contextPath}/resources/js/product-detail.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
 <script>
-  function setSelectedColor(color) {
-    // You can implement this with AJAX or form submission
-    window.location.href = '${pageContext.request.contextPath}/product/detail?id=${product.id}&color=' + color;
+  const colors = [<c:forEach items="${colors}" var="color">"${color}",</c:forEach>];
+  const sizes = [<c:forEach items="${sizes}" var="size">"${size}",</c:forEach>];
+  let selectedColor = colors.length > 0 ? colors[0] : "";
+  let selectedSize = sizes.length > 0 ? sizes[0] : "";
+  let quantity = 1;
+  const productId = ${product.id};
+  const maxQuantity = ${product.stock_quantity};
+  const contextPath = "${pageContext.request.contextPath}";
+
+  function toggleOption(selectedBtn, container) {
+    const buttons = container.getElementsByTagName("button");
+    for (let btn of buttons) btn.classList.remove("active");
+    selectedBtn.classList.add("active");
   }
 
-  function setSelectedSize(size) {
-    // You can implement this with AJAX or form submission
-    window.location.href = '${pageContext.request.contextPath}/product/detail?id=${product.id}&size=' + size;
-  }
+  function setSelectedColor(color) { selectedColor = color; }
+  function setSelectedSize(size) { selectedSize = size; }
+
+  document.addEventListener("DOMContentLoaded", function () {
+    document.getElementById("decreaseQty").addEventListener("click", () => {
+      let value = parseInt(document.getElementById("quantity").value);
+      if (value > 1) {
+        document.getElementById("quantity").value = value - 1;
+        quantity = value - 1;
+      }
+    });
+
+    document.getElementById("increaseQty").addEventListener("click", () => {
+      let value = parseInt(document.getElementById("quantity").value);
+      if (value < maxQuantity) {
+        document.getElementById("quantity").value = value + 1;
+        quantity = value + 1;
+      } else {
+        alert("Số lượng vượt quá số lượng tồn kho!");
+      }
+    });
+
+    document.getElementById("addToCartBtn").addEventListener("click", async () => {
+      try {
+        const response = await fetch('${pageContext.request.contextPath}/product-detail', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+          body: new URLSearchParams({
+            productId: ${product.id},
+            color: document.querySelector('.color-options .active')?.textContent || '',
+            size: document.querySelector('.size-options .active')?.textContent || '',
+            quantity: document.getElementById('quantity').value
+          })
+        });
+
+        const result = await response.json();
+
+        if (result.error === 'login_required') {
+          window.location.href = '${pageContext.request.contextPath}/login?redirect=' + encodeURIComponent(window.location.href);
+          return;
+        }
+
+        if (result.success) {
+          alert('Thêm vào giỏ hàng thành công!');
+        } else {
+          alert('Lỗi: ' + (result.error || 'Không xác định'));
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        alert('Có lỗi xảy ra khi kết nối tới server');
+      }
+    });
+
+    document.getElementById("buyNowBtn").addEventListener("click", () => {
+      window.location.href = contextPath + '/checkout?productId=' + productId + '&color=' + encodeURIComponent(selectedColor) + '&size=' + encodeURIComponent(selectedSize) + '&quantity=' + quantity;
+    });
+  });
 </script>
 </body>
 </html>

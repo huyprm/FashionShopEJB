@@ -59,5 +59,13 @@ public class ProductVariantService implements ProductVariantServiceRemote {
 
         return "List product variant deleted";
     }
+
+    @Override
+    public List<ProductVariant> getListProductVariantById(int id) {
+        return entityManager.createQuery("SELECT pv FROM ProductVariant pv WHERE pv.product.id = :id", ProductVariant.class)
+                .setParameter("id", id)
+                .getResultList();
+    }
+
 }
 

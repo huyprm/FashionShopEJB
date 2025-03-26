@@ -34,10 +34,10 @@
                         <a href="${pageContext.request.contextPath}/logout" class="btn btn-danger ms-2">Đăng Xuất</a>
                     </div>
                     <!-- Biểu tượng giỏ hàng -->
-                    <div class="cart-icon">
+                    <a href="${pageContext.request.contextPath}/cart" class="cart-icon">
                         <img src="https://cdn-icons-png.flaticon.com/512/263/263142.png" alt="Cart" class="cart-img">
                         <span class="cart-count" id="cartCount">0</span>
-                    </div>
+                    </a>
                 </c:if>
 
         </div>
